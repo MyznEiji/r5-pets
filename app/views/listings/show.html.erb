@@ -122,26 +122,10 @@
     </div>
 
 
-    <!-- レビュ-  -->
-    <div class="row">
-        <div class="col-md-8">
-            <h3 class="row-space-3">このリスティングについて</h3>
-            <p><%= @listing.listing_content %>
-               <%= @listing.listing_content %>
-               <%= @listing.listing_content %>
-               <%= @listing.listing_content %>
-               <%= @listing.listing_content %>
-            </p>
-        </div>
-
-        <div class="col-md-4">
-
-        </div>
-    </div>
-
     <!-- Google maps api  -->
     <div class="row">
         <div class="col-md-8">
+          <h3 class="row-space-3">アクセス</h3>
           <div id="map"></div>
         </div>
 
@@ -157,6 +141,18 @@
         width: 100%;
       }
     </style>
+
+
+    <!-- レビュ-  -->
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="row-space-3">近くのリスティング</h3>
+        </div>
+
+        <div class="col-md-4">
+
+        </div>
+    </div>
 
 <script>
       // This example creates circles on the map, representing populations in North
@@ -186,7 +182,7 @@
     </script>
 
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=<%= ENV["GOOGLE_API_KEY"] %>&callback=initMap">
     </script>
 
 </div>
