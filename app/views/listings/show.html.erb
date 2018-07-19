@@ -2,28 +2,28 @@
 
 <!-- ジャンボトロン -->
 <div class="jumbotron row-space-0" style="margin-top: -20px; background: none;">
-
+    
   <!-- カルーセル -->
-  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">           
     <!-- リストの点 -->
     <% if @photos.length > 1 %>
       <ol class="carousel-indicators">
         <% @photos.each do |photo| %>
             <li data-target="#myCarousel" data-slide-to="<%= photo.id %>"></li>
-        <% end %>
-      </ol>
-    <% end %>
+        <% end %>   
+      </ol>             
+    <% end %>     
 
     <div class="carousel-inner" role="listbox">
-      <% if @photos %>
+      <% if @photos %>             
         <% @photos.each do |photo| %>
-          <div class="item <%= 'active' if photo.id == @photos[0].id %>">
+          <div class="item <%= 'active' if photo.id == @photos[0].id %>">          
             <%= image_tag photo.image.url(),style: "height:420px; width:100%; overflow:hidden;" %>
           </div>
-        <% end %>
+        <% end %>   
       <% end %>
     </div>
-
+      
     <!-- 左右の矢印 -->
     <% if @photos.length > 1%>
       <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -79,9 +79,9 @@
                         <div class="panel-heading">
                                 <span style="font-size:16px;"><%= @listing.price_pernight %>円（一晩あたり）</span>
                         </div>
-
-                        <div class="panel-body panel-real">
-                            <%= form_for @listing, :html => { multipart: true } do |f| %>
+                        
+                        <div class="panel-body panel-real">         
+                            <%= form_for @listing, :html => { multipart: true } do |f| %>                                   
                                 <div class="actions text-center">
                                     <%= f.submit "この日程で予約する", class: "btn btn-danger btn-wide" %>
                                 </div>
@@ -97,93 +97,116 @@
 <!-- メインコンテント -->
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <h3 class="row-space-3">このリスティングについて</h3>
-                <p><%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
-                   <%= @listing.listing_content %>
+                <p><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %><%= @listing.listing_content %>
                 </p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
+            
+        </div>
+    </div>  
 
+
+    <!-- レビュー    -->
+    <div class="row">
+        <div class="col-md-9">
+            <h3 class="row-space-3">レビュー</h3>
+        </div>
+
+        <div class="col-md-3">
+        
         </div>
     </div>
 
-
-    <!-- Google maps api  -->
+    <!-- google map    -->
     <div class="row">
-        <div class="col-md-8">
-          <h3 class="row-space-3">アクセス</h3>
-          <div id="map"></div>
+        <div class="col-md-9">
+            <h3 class="row-space-3">アクセス</h3>
+            <div id="map"></div>
         </div>
 
-        <div class="col-md-4">
-
+        <div class="col-md-3">
+        
         </div>
     </div>
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 350px;
-        width: 100%;
-      }
+        #map{
+            width: 100%;
+            height: 350px;
+        }
+        
     </style>
 
-
-    <!-- レビュ-  -->
+    <!-- 近くのリスティング    -->
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <h3 class="row-space-3">近くのリスティング</h3>
+            
+            <% for listing in @listing.nearbys(10) %>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-listing text-center" style="padding: 0;">
+                            <%= link_to(listing) do %>
+                                <%= image_tag listing.photos[0].image.url(:medium)  if listing.photos.length > 0 %>
+                            <% end %>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-8 col-xs-8">
+                                    <%= link_to listing.listing_title, listing %><br>
+                                </div>
+                                <div class="col-md-3 col-xs-3">
+                                    <%= image_tag listing.user.image,class:"img-circle profile-1" %>
+                                </div>
+                                <div class="price-card">
+                                    <%= listing.price_pernight %> 円     
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+
         </div>
 
-        <div class="col-md-4">
-
+        <div class="col-md-3">
+        
         </div>
     </div>
 
+</div>
+
 <script>
-      // This example creates circles on the map, representing populations in North
-      // America.
-      function initMap() {
-        // Create the map.
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 14,
-          center: {lat: <%= @listing.latitude %>, lng: <%= @listing.longitude %>},
-          mapTypeId: 'terrain'
-        });
+function initMap() {
+  
+  // Create the map.
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 14,
+    center: {lat: <%=@listing.latitude %>, lng: <%=@listing.longitude %>},
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  });
 
-        // Construct the circle for each value in citymap.
-        // Note: We scale the area of the circle based on the population.
-          // Add the circle for this city to the map.
-          var cityCircle = new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35,
-            map: map,
-            center: {lat: <%= @listing.latitude %>, lng: <%= @listing.longitude %>},
-            radius: 500
-            });
-      }
-    </script>
 
-    <script async defer
+  // Add the circle for this city to the map.
+  var cityCircle = new google.maps.Circle({
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    map: map,
+    center: {lat: <%=@listing.latitude %>, lng: <%=@listing.longitude %>},
+    radius: 500
+  });
+  
+}
+</script>
+<script async defer
     src="https://maps.googleapis.com/maps/api/js?key=<%= ENV["GOOGLE_API_KEY"] %>&callback=initMap">
-    </script>
+</script>
 
 </div>
 
