@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
   root to: 'pages#index'
 
+  get '/setdate' => 'reservations#setdate'
+  get '/duplicate' => 'reservations#duplicate'
 
   get 'manage-listing/:id/basics',      to: 'listings#basics',      as: 'manage_listing_basics'
   get 'manage-listing/:id/description', to: 'listings#description', as: 'manage_listing_description'
