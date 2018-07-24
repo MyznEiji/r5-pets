@@ -66,6 +66,8 @@ gem 'devise'
 
 gem 'jquery-ui-rails'
 
+gem 'jquery-rails'
+
 gem 'toastr-rails'
 
 # facebook log-in
