@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks', registrations: 'registrations' }
   resources :listings
   resources :users, only: [:show]
+
   resources :photos, only: [:create, :destroy] do
     collection do 
       get :link
@@ -16,6 +17,8 @@ Rails.application.routes.draw do
 
   get '/setdate' => 'reservations#setdate'
   get '/duplicate' => 'reservations#duplicate'
+  get '/reservations' => 'reservations#index'
+
 
   get 'manage-listing/:id/basics',      to: 'listings#basics',      as: 'manage_listing_basics'
   get 'manage-listing/:id/description', to: 'listings#description', as: 'manage_listing_description'

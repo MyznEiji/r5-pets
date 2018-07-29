@@ -1,11 +1,60 @@
 class ReservationsController < ApplicationController
 
-  def create
-    @reservation = current_user.reservations.create(reservation_params)
 
-    redirect_to @reservation.listing,  notice: "予約が完了しました"
+  
+  def index
+    @reservations = current_user.reservations.where(self_booking: nil) 
   end
 
+  def reserved
+    @listings = current_user.listings
+  end
+
+  def create
+    @listing = Listing.find(params[:listing_id])
+
+    # 自分で自分の部屋を予約する場合(カレンダーでの予約作成)
+    if current_user == @listing.user
+      #選択されてた日付 ","で区切って配列化
+      selectedDates = params[:reservation][:selectedDates].split(",")
+
+      # 今まで、自分自身で予約した予約を取り出す
+      reservationsByme = @listing.reservations.where(user_id: current_user.id)
+      
+      # 以前、自分自身で選択した日付
+      oldSelectedDates = []
+
+      # 以前、自分自身で予約した"予約の日付"を配列に入れていく
+      reservationsByme.each do |reservation|
+        oldSelectedDates.push(reservation.start_date)
+      end  
+
+      # 以前の自身で選択した日付の予約を全て消す
+      if oldSelectedDates
+        oldSelectedDates.each do |date|
+          @reservation = current_user.reservations.where(start_date:date,end_date:date)
+          @reservation.destroy_all
+        end
+      end
+
+      #新しい日付の予約をクリエイトする
+      selectedDates
+      if selectedDates
+        selectedDates.each do |date|
+          current_user.reservations.create(:listing_id => @listing.id,:start_date => date,:end_date => date,:self_booking => true)
+        end
+      end
+      
+      redirect_to :back, notice: "更新しました。" 
+
+    else
+        
+      # 予約をパラメーター付与して作成
+      @reservation = current_user.reservations.create(reservation_params)          
+      redirect_to @reservation.listing, notice: "予約が完了しました。" 
+
+    end
+  end
 
   def setdate
     # ajaxで送られてきたlisting_idを元にそのリスティングの予約をjsonで返す
