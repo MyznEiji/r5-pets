@@ -45,7 +45,7 @@ class ReservationsController < ApplicationController
         end
       end
       
-      redirect_to :back, notice: "更新しました。" 
+      redirect_to manage_listing_calendar_path(@listing), notice: "更新しました。" 
 
     else
         
