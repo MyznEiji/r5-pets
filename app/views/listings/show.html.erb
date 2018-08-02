@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-md-3 text-center row-space-2">
                     <%= link_to user_path(@listing.user) do %>
-                        <%= image_tag @listing.user.image,class:"img-circle profile-2" %>
+                        <%= image_tag @listing.user.image.url(:medium) ,class:"img-circle profile-2" %>
                     <% end %>
                     <h5><%= @listing.user.name %></h5>
                 </div>
@@ -221,7 +221,7 @@
                                     <%= link_to listing.listing_title, listing %><br>
                                 </div>
                                 <div class="col-md-3 col-xs-3">
-                                    <%= image_tag listing.user.image,class:"img-circle profile-1" %>
+                                    <%= image_tag listing.user.image.url(:medium),class:"img-circle profile-1" %>
                                 </div>
                                 <div class="price-card">
                                     <%= listing.price_pernight %> 円     
